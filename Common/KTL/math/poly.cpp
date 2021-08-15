@@ -18,15 +18,17 @@ using std::__lg;
 
 const size_t POLYMUL_BRUTE_LIMIT = 512;
 
+
+template<typename T, typename t>
+T _cast_ct(complex<t> x) { return x.real(); }
+template<typename T, typename T1>
+T _cast_ct(T1 x) { return (T)x; }
+
 template<typename T, typename Transform>
 struct poly_multiplies
 {
     Transform tr;
     using C = typename Transform::C;
-
-    static T cast_ct(C x) { return x; }
-    template<typename t>
-    static T cast_ct(complex<t> x) { return x.real(); }
 
     vector<T> operator() (const vector<T>& P, const vector<T>& Q)
     {
@@ -52,7 +54,7 @@ struct poly_multiplies
                 W[i] = U[i] * V[i];
             auto Rc = tr[W];
             for(size_t i = 0; i <= r; i++)
-                R[i] = cast_ct(Rc[i]);
+                R[i] = _cast_ct<T>(Rc[i]);
         }
         while(not R.empty() and not R.back())
             R.pop_back();
